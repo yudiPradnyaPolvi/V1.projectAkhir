@@ -1,60 +1,60 @@
-const fs = require("fs");
-const path = require("path");
-const dbPath = path.resolve(__dirname, "./postsDokter.json");
+const {
+  fetchPosts,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
+} = require("../domain/post.domain.dokter");
 
-function getData() {
-  if (!fs.existsSync(dbPath)) {
-    fs.writeFileSync(dbPath, JSON.stringify([]));
-  }
-  let data = fs.readFileSync(dbPath);
-  data = data.toString("utf-8");
-  return JSON.parse(data);
+async function getPosts(req, res) {
+  const data = await fetchPosts();
+  res.status(data.status);
+  res.send(data.data);
 }
-
-function writeData(data) {
-  fs.writeFileSync(dbPath, JSON.stringify(data), { encoding: "utf-8" });
+async function getOnePost(req, res) {
+  const id = req.params.id;
+  const data = await getPost(id); // bisa pakai => Post.find({ _id: id });
+  res.send(data);
 }
-
-function fetch() {
-  let data = getData();
-  return data;
+async function addPosts(req, res) {
+  const postData = {
+    nomor_registrasi: req.body.nomor_registrasi,
+    nama_dokter: req.body.nama_dokter,
+    profesi: req.body.profesi,
+    jenis_kelamin: req.body.jenis_kelamin,
+    email: req.body.email,
+    nomor_telepon: req.body.nomor_telepon,
+    alamat: req.body.alamat,
+    jadwal: req.body.jadwal,
+  };
+  const response = await createPost(postData);
+  res.status(response.status).send(response.data || response);
 }
-
-function getOne(id) {
-  let data = getData();
-  return data.find((d) => d.id == id);
+async function updateOne(req, res) {
+  const id = req.params.id;
+  const postData = {
+    nomor_registrasi: req.body.nomor_registrasi,
+    nama_dokter: req.body.nama_dokter,
+    profesi: req.body.profesi,
+    jenis_kelamin: req.body.jenis_kelamin,
+    email: req.body.email,
+    nomor_telepon: req.body.nomor_telepon,
+    alamat: req.body.alamat,
+    jadwal: req.body.jadwal,
+  };
+  const response = await updatePost(id, postData);
+  res.status(response.status).send(response.data || response);
 }
-
-function create(bodyData) {
-  let data = getData();
-  data.push(bodyData);
-  writeData(data);
-  return bodyData;
-}
-
-function update(bodyData, id) {
-  let data = getOne(id);
-  let allData = fetch();
-  data = { ...data, ...bodyData };
-  const index = allData.findIndex((d) => d.id == id);
-  if (!index || !data) {
-    throw Error("data tidak ditemukan");
-  }
-  allData[index] = data;
-  writeData(allData);
-  return data;
-}
-
-function destroy(id) {
-  let data = fetch();
-  data = data.filter((d) => d.id != id);
-  writeData(data);
+async function deleteOne(req, res) {
+  const id = req.params.id;
+  const response = await deletePost(id);
+  res.status(response.status).send();
 }
 
 module.exports = {
-  fetch,
-  create,
-  getOne,
-  update,
-  destroy,
+  getPosts,
+  addPosts,
+  getOnePost,
+  updateOne,
+  deleteOne,
 };

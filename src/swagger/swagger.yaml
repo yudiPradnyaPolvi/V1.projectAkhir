@@ -18,7 +18,82 @@ securityDefinitions:
       Authentication tupes for bearer header
 
 paths:
-  /gets-Dokter:
+  /register:
+    post:
+      summary: Create new account.
+      description: Create new account and return the created data
+      tags:
+        - "Login and Register"
+      security:
+        - Bearer: []
+      parameters:
+        - name: create post
+          in: body
+          required: true
+          description: Create post body request
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: O
+  /login:
+    post:
+      summary: Create new posts-dokter.
+      description: Create new post-dokter and return the created data
+      tags:
+        - "Login and Register"
+      security:
+        - Bearer: []
+      parameters:
+        - name: create post
+          in: body
+          required: true
+          description: Create post body request
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+  /logout:
+    post:
+      summary: Create new posts-dokter.
+      description: Create new post-dokter and return the created data
+      tags:
+        - "Login and Register"
+      security:
+        - Bearer: []
+      parameters:
+        - name: create post
+          in: body
+          required: true
+          description: Create post body request
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+  /dokter:
     get:
       summary: Returns a list of posts-dokter.
       description: |
@@ -35,7 +110,7 @@ paths:
       responses:
         200:
           description: OK
-  /posts-dokter:
+
     post:
       summary: Create new posts-dokter.
       description: Create new post-dokter and return the created data
@@ -73,7 +148,7 @@ paths:
         200:
           description: OK
 
-  /getsone-dokter/{id}:
+  /dokter/{id}:
     get:
       summary: Returns one of post-dokter.
       description: |
@@ -91,7 +166,6 @@ paths:
         200:
           description: OK
 
-  /edit-dokter/{id}:
     put:
       summary: Update one of post
       description: |
@@ -134,7 +208,6 @@ paths:
         200:
           description: OK
 
-  /delete-dokter/{id}:
     delete:
       summary: Delete one of post-dokter.
       description: |
@@ -290,7 +363,7 @@ paths:
         200:
           description: OK
 
-  /postcheck-Bmi:
+  /checkBmi:
     post:
       summary: Create new posts-checkBmi.
       description: Create new post-dokter and return the created data
